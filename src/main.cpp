@@ -114,14 +114,14 @@ private:
     size_t open_cards_ = 1;
     Playing_card first_open_;
 
-    void PrintStack(std::ostream &os, std::deque<Playing_card> &stack) const {
+    void PrintPack(std::ostream &os, std::deque<Playing_card> &stack) const {
         if (stack.empty()) {
             return;
         }
 
         auto tmp = stack.back();
         stack.pop_back();
-        PrintStack(os, stack);
+        PrintPack(os, stack);
         if (tmp.IsOpen()) {
             os << tmp << "op ";
         } else {
@@ -131,7 +131,7 @@ private:
     }
 };
 
-bool Perebor(std::vector<Pack> &cur_pose) {
+bool BruteForce(std::vector<Pack> &cur_pose) {
     for (size_t j = 0; j < MAX_ITERATIONS; j++) {
         std::sort(cur_pose.begin(), cur_pose.end());
         size_t empty_heaps = 0;
@@ -171,7 +171,7 @@ int main() {
         packs.push_back(pack_at_the_moment);
     }
 
-    std::cout << (Perebor(packs) ? "Win" : "Loose") << "\n";
+    std::cout << (BruteForce(packs) ? "Win" : "Loose") << "\n";
     for (size_t i = 0; i < number_of_packs; ++i) {
         std::cout << packs[i];
     }
@@ -192,7 +192,7 @@ std::istream &operator>>(std::istream &is, Playing_card &playing_card) {
 
 std::ostream &operator<<(std::ostream &os, const Pack &pack) {
     std::deque<Playing_card> saver_stack = pack.pack_;
-    pack.PrintStack(os, saver_stack);
+    pack.PrintPack(os, saver_stack);
     os << "\n";
     return os;
 }
